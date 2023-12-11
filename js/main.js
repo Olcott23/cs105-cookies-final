@@ -141,6 +141,8 @@ function switchView() {
     }
 }
 
+let piechart2;
+
 function processDataForPieChart2(data) {
     // Aggregate data by "Worry.About.Info"
     let worryCounts = data.reduce((acc, val) => {
