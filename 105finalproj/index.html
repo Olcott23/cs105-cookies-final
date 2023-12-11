@@ -1,0 +1,148 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CS105 - Final Project</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:100,400,300,400italic,700' rel='stylesheet' type='text/css'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="css/fontawesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="./css/fullpage.css" />
+</head>
+<body>
+<div class="container" id="fullpage">
+
+    <!-- Header Section -->
+    <div class="section swipe-section">
+        <div class="d-flex justify-content-center align-items-center h-100">
+            <div>
+                <h1>Cookie Storage on the Web</h1>
+                <div class="subtitle">By Sofia Giannuzzi and Hailey Olcott</div>
+            </div>
+        </div>
+    </div>
+
+        <div class="section fp-noscroll">
+            <br><h2 class="switch-label">Duration of Cookie Storage</h2>
+            <button id="switchView" class="btn btn-light align-self-center" type="button" onclick="switchView()" style="box-shadow: 3px 3px 5px rgba(0,0,0,0.3); background-color: #ECECEC;">Data Table</button>
+            <div id="stateCarousel" class="carousel slide" data-ride="carousel">
+                <div class="row graph-row carousel-inner">
+                    <!-- data table -->
+                    <div class="carousel-item">
+                        <div class="col">
+                            <div class="row">
+                                <div id="data-table">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- area chart -->
+                    <div class="carousel-item active">
+                        <div class="col">
+                            <div class="row">
+                                <div id="stacked-area-chart">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+
+        <div class="section fp-noscroll">
+            <br> <br> <br> <br>
+            <br>
+            <div> <h2>Storage by Platform</h2></div>
+            <div class="row justify-content-center graph-row">
+                <div class="align-self-center graph-content" id="pie-chart"></div>
+            </div>
+            <br> <br> <br> <br> <br> <br>
+        </div>
+
+        <div class="section fp-noscroll">
+            <br> <br>
+            <div> <h2>Description of Cookies</h2></div>
+            <div class="row justify-content-center graph-row">
+                <div class="align-self-center graph-content" id="bubble-chart"></div>
+            </div>
+        </div>
+        <div class="section fp-noscroll">
+            <br> <br>
+            <h2> Reactions of the Public </h2>
+            <div class="row justify-content-center graph-row">
+                <!-- First Section -->
+                <div class="col-md-6 align-self-center graph-content" id="scatter-plot-1">
+
+                </div>
+
+                <!-- Second Section -->
+                <div class="col-md-6 align-self-center graph-content" id="bar-chart">
+
+                </div>
+            </div>
+        </div>
+        <div class="section fp-noscroll">
+            <h2> Reactions of the Public, Cont. </h2>
+            <div class="row justify-content-center graph-row">
+                <div class="align-self-center graph-content" id="piechart2"></div>
+            </div>
+        </div>
+        <div class="section fp-noscroll">
+            <h2> Reactions of the Public, Cont. </h2>
+            <div class="row justify-content-center graph-row">
+                <div class="align-self-center graph-content" id="map"></div>
+            </div>
+        </div>
+        <div class="section fp-noscroll">
+            <h2> Thank you! <3 </h2>
+            <div class="row justify-content-center graph-row">
+                <!-- First Section -->
+                <div class="col-md-6 align-self-center graph-content" id="stickfigure">
+                </div>
+            </div>
+        </div>
+        <div class="section fp-noscroll">
+            <h2> Sources </h2>
+            <div class="row justify-content-center graph-row">
+                <a href="https://www.kaggle.com/datasets/kaustubhlohani/trackers-on-popular-websites-105-countries">
+                    <br> <br> <br>1. Trackers on Popular Websites (105 countries)</a>
+                <a href="https://www.kaggle.com/datasets/econdata/internet-privacy-poll">2. Internet Privacy Poll </a>
+                <a href="https://github.com/jkwakman/Open-Cookie-Database">3. Open Cookie Database </a>
+            </div>
+            <br> <br> <br> <br> <br>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+
+    <script src="js/areaChart.js"></script>
+    <script src="js/stickFigure.js"></script>
+    <script src="js/scatterPlot1.js"></script>
+    <script src="js/barChart.js"></script>
+    <script src="js/dataTable.js"></script>
+    <script src="js/bubbleChart.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/mapVis.js"></script>
+    <script src="js/piechart.js"></script>
+    <script src="js/piechart2.js"></script>
+    <script type="text/javascript" src="js/fullpage.js"></script>
+    <script type="text/javascript">
+        var myFullpage = new fullpage('#fullpage', {
+            sectionsColor: ['transparent']
+        });
+    </script>
+</div>
+</body>
+</html>
+

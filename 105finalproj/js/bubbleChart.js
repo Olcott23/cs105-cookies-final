@@ -8,14 +8,18 @@ class BubbleChart {
     initVis() {
         const vis = this;
 
-        vis.margin = { top: 10, right: 100, bottom: 10, left: 10 };
-        vis.width = 1000 - vis.margin.left - vis.margin.right;
-        vis.height = 400 - vis.margin.top - vis.margin.bottom;
+        // Get the width of the parent container
+        const parentWidth = d3.select("#" + vis.element).node().getBoundingClientRect().width;
 
-        // Append SVG to the DOM
+        vis.margin = { top: 10, right: 10, bottom: 10, left: 10 };
+        vis.width = parentWidth - vis.margin.left - vis.margin.right;
+        vis.height = parentWidth * (400 / 1300) - vis.margin.top - vis.margin.bottom; // Maintain aspect ratio
+
+        // Append SVG to the DOM with responsive settings
         vis.svg = d3.select("#" + vis.element).append("svg")
-            .attr("width", vis.width + vis.margin.left + vis.margin.right)
-            .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("viewBox", `0 0 ${parentWidth} ${vis.height + vis.margin.top + vis.margin.bottom}`)
             .append("g")
             .attr("transform", `translate(${vis.margin.left},${vis.margin.top})`);
 
@@ -29,14 +33,16 @@ class BubbleChart {
             .style("border", "solid")
             .style("border-width", "1px")
             .style("padding", "5px")
-            .style("border", "0px")
             .style("border-radius", "8px")
             .style("pointer-events", "none")
             .style("fill", "#727E7C")
             .style("font-family", "'Roboto', sans-serif")
             .style("font-size", "14px");
 
-        // Create bubbles
+        let colorScale = d3.scaleSequential(d3.interpolatePurples)
+            .domain([0, vis.data.length]);
+
+        // Create bubbles with varying shades of purple
         vis.bubbles = vis.svg.selectAll(".bubble")
             .data(vis.data)
             .enter().append("circle")
@@ -44,8 +50,8 @@ class BubbleChart {
             .attr("cx", () => Math.random() * vis.width)
             .attr("cy", () => Math.random() * vis.height)
             .attr("r", 7) // Set the initial radius of bubbles
-            .style("fill", "#b2aade")
-            .style("stroke", "#04206d") // Outline color
+            .style("fill", (d, i) => colorScale(i)) // Use color scale based on index
+            .style("stroke", "#AFAFD0") // Outline color
             .style("stroke-width", "2px") // Outline width
             .style("fill-opacity", 0.9); // Opacity
 
@@ -55,9 +61,10 @@ class BubbleChart {
                 vis.tooltip.transition()
                     .duration(200)
                     .style("opacity", 0.9);
+
                 vis.tooltip.html(`<b>Platform:</b> ${d.Platform}<br><b>Description:</b> ${d.Description}`)
-                    .style("left", (event.pageX + 5) + "px")
-                    .style("top", (event.pageY - 28) + "px");
+                    .style("left", (event.pageX - 30) + "px")
+                    .style("top", (event.pageY - 90) + "px");
             })
             .on("mouseout", function (d) {
                 vis.tooltip.transition()

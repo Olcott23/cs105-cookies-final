@@ -10,15 +10,17 @@ class StackedAreaChart {
     initVis() {
         const vis = this;
 
-        // Set margins and dimensions
-        vis.margin = { top: 20, right: 30, bottom: 90, left: 50 };
-        vis.width = 850 - vis.margin.left - vis.margin.right;
-        vis.height = 450 - vis.margin.top - vis.margin.bottom;
+        // Existing code for margins and dimensions...
+        vis.margin = { top: 110, right: 20, bottom: 80, left: 80 };
+        const parentWidth = d3.select("#" + vis.element).node().getBoundingClientRect().width;
+        vis.width = parentWidth - vis.margin.left - vis.margin.right;
+        vis.height = 430 - vis.margin.top - vis.margin.bottom;
 
-        // Append SVG to the DOM
+        // Append SVG to the DOM with responsive settings
         vis.svg = d3.select("#" + vis.element).append("svg")
-            .attr("width", vis.width + vis.margin.left + vis.margin.right)
-            .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
+            .attr("width", '100%')
+            .attr("height", '100%')
+            .attr("viewBox", `0 0 ${parentWidth} ${vis.height + vis.margin.top + vis.margin.bottom}`)
             .append("g")
             .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
@@ -54,6 +56,7 @@ class StackedAreaChart {
         vis.tooltip = vis.svg.append("text")
             .attr("x", vis.width - 10)
             .attr("y", 40)
+            .style("border", "solid")
             .style("font-weight", "bold")
             .style("text-anchor", "end")
             .style("opacity", 0)
@@ -111,7 +114,7 @@ class StackedAreaChart {
 
         //  X-axis label
         vis.svg.append("text")
-            .attr("transform", `translate(${vis.width / 2}, ${vis.height + vis.margin.bottom - 55})`)
+            .attr("transform", `translate(${vis.width / 2}, ${vis.height + vis.margin.bottom - 30})`)
             .style("text-anchor", "middle")
             .style("fill", "#727E7C")
             .style("font-size", "10px") // Set font size to smaller
@@ -121,7 +124,7 @@ class StackedAreaChart {
         //  Y-axis label
         vis.svg.append("text")
             .attr("transform", "rotate(-90)")
-            .attr("y", 0 - vis.margin.left)
+            .attr("y", 0 - vis.margin.left + 30)
             .attr("x", 0 - (vis.height / 2 + 10))
             .attr("dy", "1em")
             .style("text-anchor", "middle")

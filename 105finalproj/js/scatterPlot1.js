@@ -8,9 +8,15 @@ class ScatterPlot {
     initVis() {
         const vis = this;
 
+        // Get the width of the parent container
+        const parentWidth = d3.select("#" + this.element).node().getBoundingClientRect().width;
+
+        // Set margins
         vis.margin = { top: 70, right: 60, bottom: 40, left: 50 };
-        vis.width = 480 - vis.margin.left - vis.margin.right;
-        vis.height = 400 - vis.margin.top - vis.margin.bottom;
+
+        // Adjust width and height based on parent container's width
+        vis.width = parentWidth - vis.margin.left - vis.margin.right;
+        vis.height = 400 - vis.margin.top - vis.margin.bottom; // You can also make height responsive if needed
 
         // Append SVG to the DOM
         vis.svg = d3.select("#" + vis.element).append("svg")
@@ -78,8 +84,8 @@ class ScatterPlot {
             .style("background-color", "white")
             .style("border", "solid")
             .style("border-width", "1px")
+            .style("border", "solid")
             .style("padding", "5px")
-            .style("border", "0px")
             .style("border-radius", "8px")
             .style("pointer-events", "none")
             .style("fill", "#727E7C")

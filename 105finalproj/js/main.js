@@ -68,6 +68,37 @@ function processData(data) {
     return { categories, stackedData };
 }
 
+function processDataForMap(data) {
+    // Aggregate data by state and calculate the average "Privacy.Importance"
+    let stateAverages = {};
+    data.forEach(d => {
+        // Check if "Privacy.Importance" is not "NA"
+        if (d["Privacy.Importance"] !== "NA") {
+            let state = d.State;
+            let importance = parseInt(d["Privacy.Importance"], 10);
+
+            // Initialize state in stateAverages if not already present
+            if (!stateAverages[state]) {
+                stateAverages[state] = { total: 0, count: 0 };
+            }
+
+            stateAverages[state].total += importance;
+            stateAverages[state].count++;
+        }
+    });
+
+    // Calculate the average for each state
+    for (let state in stateAverages) {
+        if (stateAverages[state].count > 0) {
+            stateAverages[state] = stateAverages[state].total / stateAverages[state].count;
+        } else {
+            stateAverages[state] = null; // Assign null or a default value if no data points were valid
+        }
+    }
+
+    return stateAverages;
+}
+
 function processDataForPieChart(data) {
     // Aggregate data by platform
     let platformCounts = data.reduce((acc, val) => {
@@ -93,16 +124,58 @@ function processDataForBarChart(data) {
     return data.filter(d => d.Age !== "NA" && d["Info.On.Internet"] !== "NA");
 }
 
+let carousel = new bootstrap.Carousel(document.getElementById('stateCarousel'), {interval: false})
+
+function switchView() {
+    const switchButton = document.getElementById('switchView');
+    const switchLabel = document.querySelector('.switch-label');
+
+    carousel.next(); // Assuming carousel.next() toggles between the data table and area chart
+
+    if (switchButton.innerHTML === 'Data Table') {
+        switchButton.innerHTML = 'Area Chart'; // Corrected text
+        switchLabel.innerHTML = 'Cookie Storage Data Table'; // Update label for Area Chart
+    } else {
+        switchButton.innerHTML = 'Data Table'; // Corrected text
+        switchLabel.innerHTML = 'Duration of Cookie Storage'; // Update label for Data Table
+    }
+}
+
+function processDataForPieChart2(data) {
+    // Aggregate data by "Worry.About.Info"
+    let worryCounts = data.reduce((acc, val) => {
+        // Convert to string and trim spaces
+        let key = String(val["Worry.About.Info"]).trim();
+
+        // Checking if key is '0', '1', or categorizing as 'NA'
+        if (key !== "0" && key !== "1") {
+            key = "NA";
+        }
+
+        acc[key] = (acc[key] || 0) + 1;
+        return acc;
+    }, {});
+
+    // Debugging: Log the worryCounts object
+    console.log("Worry Counts:", worryCounts);
+
+    // Convert the aggregated data into an array suitable for the pie chart
+    let pieChartData2 = Object.entries(worryCounts).map(([category, count]) => {
+        return { category: category, value: count };
+    });
+
+    return pieChartData2;
+}
 
 function loadData() {
 
     d3.csv("data/cookie_database.csv").then(csvData => {
 
-        console.log("data", csvData);
-
         let data = processData(csvData);
 
         let stickFigure = new StickFigure();
+
+        let datatable = new DataTable(csvData);
 
         console.log('data loaded');
 
@@ -118,6 +191,11 @@ function loadData() {
         d3.csv("data/AnonymityPoll.csv").then(scatterPlotData => {
             let processedScatterPlotData1 = processDataForScatterPlot1(scatterPlotData);
             let scatterplot1 = new ScatterPlot('scatter-plot-1', processedScatterPlotData1);
+
+            console.log("map data:")
+            let mapData = processDataForMap(scatterPlotData);
+            console.log(mapData)
+            let mymapVis = new MapVis('map', mapData);
         });
 
         d3.csv("data/AnonymityPoll.csv").then(barChartData => {
@@ -128,6 +206,9 @@ function loadData() {
 
             // Create a bar chart instance with the processed data
             let barChart = new BarChart('bar-chart', processedBarChartData);
+
+            let pieChartData2 = processDataForPieChart2(barChartData);
+            let piechart2 = new PieChart2('piechart2', pieChartData2);
         });
     });
 }

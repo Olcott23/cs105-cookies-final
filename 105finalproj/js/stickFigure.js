@@ -26,7 +26,7 @@ class StickFigure {
         svg.append("circle")
             .attr("cx", 200)
             .attr("cy", 60 + yOffset) // Adjust vertical position
-            .attr("r", 30)
+            .attr("r", 20)
             .style("fill", "#5e4b98")
             .style("z-index", "1000");
 

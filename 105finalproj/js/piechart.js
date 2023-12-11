@@ -9,21 +9,24 @@ class PieChart {
         const vis = this;
 
         // Define margins
-        vis.margin = {top: 20, right: 10, bottom: 10, left: 10};
+        vis.margin = {top: 20, right: 5, bottom: 10, left: 10};
+
+        // Get the width of the parent container
+        const parentWidth = d3.select("#" + vis.element).node().getBoundingClientRect().width;
 
         // Adjusted width and height considering margins
-        vis.width = 400 - vis.margin.left - vis.margin.right;
-        vis.height = 400 - vis.margin.top - vis.margin.bottom;
+        vis.width = parentWidth - vis.margin.left - vis.margin.right;
+        vis.height = parentWidth - vis.margin.top - vis.margin.bottom; // Keep the aspect ratio square
         vis.radius = Math.min(vis.width, vis.height) / 2;
 
-        // Append SVG to the DOM
+        // Append SVG to the DOM with responsive settings
         vis.svg = d3.select("#" + vis.element)
             .append("svg")
-            .attr("width", vis.width + vis.margin.left + vis.margin.right)
-            .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("viewBox", `0 0 ${parentWidth} ${parentWidth}`)
             .append("g")
             .attr("transform", `translate(${vis.width / 2 + vis.margin.left}, ${vis.height / 2 + vis.margin.top})`);
-
         // Custom color scale
         // Define an array of purple shades
         const purpleShades = ['#b3bee4', '#b8a1c0', '#5e4b98', '#04206d', '#5f78ba'];
@@ -50,9 +53,9 @@ class PieChart {
             .style("opacity", 0)
             .style("position", "absolute")
             .style("text-align", "center")
+            .style("border", "solid")
             .style("padding", "8px")
             .style("background", "white")
-            .style("border", "0px")
             .style("border-radius", "8px")
             .style("pointer-events", "none")
             .style("fill", "#727E7C")
